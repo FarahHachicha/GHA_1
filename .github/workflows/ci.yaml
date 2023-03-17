@@ -56,7 +56,6 @@ jobs:
     # We publish the the docker image only if it's a push on the default branch or if it's a PR from a 
     # branch (meaning not a PR from a fork). It would be more straightforward to test if secrets.DOCKERHUB_TOKEN is 
     # defined but GitHub Action don't allow it.
-    #hani jarabt
     if: |
       needs.check_if_version_upgraded.outputs.is_upgraded_version == 'true' &&
       github.event_name == 'push' || 
@@ -71,7 +70,7 @@ jobs:
       with:
         node-version: '15'
     - run: echo $(node -e 'console.log(require("url").parse(require("./package.json").homepage).host)') > build/CNAME
-    - run: git remote set-url origin https://git:${TOKEN}@github.com/${{github.repository}}.git
+    - run: git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${{github.repository}}.git
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }} 
     - run: npx -y -p gh-pages@3.1.0 gh-pages -d build -u "github-actions-bot <actions@github.com>"
